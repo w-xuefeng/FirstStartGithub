@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>可以拖拽的muco</title>
+		<script src="js/Drag.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			html body{
+				background:url(img/bg.png) no-repeat;
+				background-size:cover;
+				padding: 0;
+				margin: 0;
+				overflow:hidden;
+			}
+			#main{
+			width: 300px;
+			height: 233px;
+			background: url(img/muco.png) no-repeat;			
+			cursor:move;
+			position: absolute;
+			top:221px;
+			left:311px;
+			z-index: 5;
+			}
+			.big{
+				width:600px;
+				height:400px;
+				position: absolute;
+				top:50%;
+				left: 50%;
+				margin-top:-200px ;
+				margin-left: -300px;
+				background: url(img/Bigmuco.png) no-repeat;
+				background-size: cover;
+			}
+			.zb{color: red;}
+			.txet{height: 300px;
+				width: 300px;}
+			#huanyuan,#tijiao,#hideORshowb,#hideORshow{cursor: pointer;}
+		</style>
+	</head>
+
+	<body>
+
+		<div id="main" onmousedown="Move(event);">
+			你好啊，我叫MUCO!
+			<br/>你可以拖拽我哦！
+		</div>
+
+		<div class="big" id="big">
+		</div>
+		<div class="txet">
+			<p>MUCO的当前坐标:</p>
+			left:<span id="left" class="zb">311px</span><br/>
+			top:<span id="top" class="zb" >221px</span><br/>
+			<button id="huanyuan" onclick="hy();">还原</button>
+			<button onclick="showORhiddenB();" id="hideORshowb">隐藏BigMUCO</button>
+			<p>请输入坐标（单位：px）:</p>
+			left:<input type="number" id="left1" class="zb" value=" "><br/>
+			top:<input type="number" id="top1" class="zb" value=" "><br/>
+			<button id="tijiao" onclick="tj();">提交</button>			
+			<button onclick="showORhidden();" id="hideORshow">隐藏MUCO</button>
+		</div>
+		
+<script type="text/javascript">
+	var dod = document.getElementById("main");
+	var dod1 = document.getElementById("big");	
+	
+function hy(){	
+	var lll = document.getElementById("left");
+	var ttt = document.getElementById("top");
+	lll.innerHTML = "311px";
+	ttt.innerHTML = "221px";
+	dod.style.left = "311px";
+	dod.style.top = "221px";
+	
+}
+function tj(){
+	var lll1 = document.getElementById("left1").value;
+	var ttt1 = document.getElementById("top1").value;
+	dod.style.left = lll1 + "px";
+	dod.style.top = ttt1 + "px";	
+}
+var n = 1;
+function showORhidden(){			
+		if(n%2==0){
+			document.getElementById("hideORshow").innerHTML = "隐藏MUCO ";
+			dod.style.display = "block";
+			n++;
+		}else{
+			document.getElementById("hideORshow").innerHTML = "显示MUCO ";
+			dod.style.display = "none";
+			n++;
+		}
+		};
+function showORhiddenB(){			
+		if(n%2==0){
+			document.getElementById("hideORshowb").innerHTML = "隐藏BigMUCO ";
+			dod1.style.display = "block";
+			n++;
+		}else{
+			document.getElementById("hideORshowb").innerHTML = "显示BigMUCO ";
+			dod1.style.display = "none";
+			n++;
+		}
+		};
+				
+
+</script>
+	</body>
+
+</html>

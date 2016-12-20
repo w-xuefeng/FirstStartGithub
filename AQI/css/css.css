@@ -1,0 +1,46 @@
+body{margin:0px;padding:0px;font-family:"微软雅黑";}
+ a{ text-decoration:none;color:black;}
+ a:hover{color:#000;text-decoration:none;}
+ .nav{height:32px; width:100%;margin:0 auto; overflow:hidden;position: absolute;top: 0px;z-index: 105;opacity: 0.25;}
+  .nav:hover{opacity: 1;}
+ .nav>li{list-style:none;height:30px; width:145px;border:1px solid rgba(0,0,0,0.75); text-align:center; line-height:30px;float: left;margin-right: 20px}
+ .nav>li:hover{ 	
+ 	background:rgba(204,201,201,1.00); 
+ 	cursor:pointer;color:#000;
+ 	border: 1px solid #fff;}
+.charts-Ares {
+	height: 600px;
+	width: 1050px;
+	margin: 0px auto;
+}
+.charts-Ares>div {
+	margin:10px;
+	float: left;
+	border:1px solid black;
+}
+.chartsA{width:500px}
+.chartsB{width:500px}
+.title {
+	width: 1050px;
+	height: 52px;
+	line-height:30px;
+	font-family: "微软雅黑";
+	margin: 50px auto -30px auto;
+}
+.title>div {
+	margin:10px;
+	float: left;
+	margin-bottom:0px;	
+}
+.TA{width:500px}
+.TB{width:500px}
+.TA>div,.TB>div{float:left;height:30px;width:50px;cursor:pointer;margin-right:20px;}
+.border {
+	border-bottom: 2px solid black
+}
+.map{height: 600px;
+	width: 1050px;
+	margin: 50px auto;}
+.hidden {
+	display: none;
+}

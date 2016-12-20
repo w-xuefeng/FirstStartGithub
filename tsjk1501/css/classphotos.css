@@ -1,0 +1,42 @@
+html body {
+	margin: 0;
+	padding: 0;
+	background: dodgerblue url(../photos/bg0.jpg) no-repeat center center fixed;
+	background-size: cover;
+	height: 100%;
+	overflow: hidden;
+}
+
+.hf {
+	height: 70px;
+	width: 100%;
+	position: absolute;
+	left: 0%;
+	top: 35px;
+	background: rgba(0, 0, 0, 0.45);
+	padding: 5px;
+}
+
+.hf>img {
+	cursor: pointer;
+}
+
+.on {
+	border-bottom: 3px solid dodgerblue;
+}
+
+.hide-show {
+	width: 50px;
+	height: 50px;
+	background: rgba(0, 0, 0, 0.25);
+	color: #fff;
+	font-size: 12px;
+	line-height: 25px;
+	font-family: "微软雅黑";
+	position: absolute;
+	right: 0px;
+	top: 45px;
+	border-radius: 20px;
+	text-align: center;
+	cursor: pointer;
+}

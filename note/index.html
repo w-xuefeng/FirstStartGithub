@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Note by wxf19951001</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script src="js/jquery.min.js"></script>
+    <script>
+//回到顶部 开始=========================
+$(document).ready(function() {
+	$("#backtop").click(function() {
+		$("html, body").animate({
+			"scroll-top": 0
+		}, "fast");
+	});
+});
+
+//*判断当在第一屏的时候，回到顶部按钮隐藏*//
+$(window).scroll(function() {
+	if ($(window).scrollTop() > 350) { //垂直滚动条offset
+		$(".nav").show(500);
+	} else {
+		$(".nav").hide(500);
+	}
+});
+
+
+//回到顶部 结束=========================
+
+   </script>
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Note</h1>
+      <h2 class="project-tagline">2016年暑假学习笔记</h2>
+      <a href="#firstweek" class="btn">第一周</a>
+      <a href="#secondweek" class="btn">第二周</a>
+      <a href="#thirdweek" class="btn">第三、四周</a>      
+    </section>
+
+
+
+<div class="nav">
+	  <p><a href="#firstweek" class="btnfixed">第一周</a></p>
+      <p><a href="#secondweek" class="btnfixed">第二周</a></p>
+      <p><a href="#thirdweek" class="btnfixed">第三、四周</a></p>
+      <p><a href="#" class="btnfixed"  id="backtop"> T O P </a></p>
+</div>
+
+
+
+
+    <section class="main-content">
+      <h3 id="firstweek">第一周</h3>
+
+<p>本周主要学习了:</p>
+<p>1.计算机三级网络技术知识一部分；</p>
+<p>2.angular.js；</p>
+<p>3.Android Studio的基本操作；</p>
+<p>4.安装了Oracle VM VirtualBox和Genymotion进行安卓开发测试。</p>
+
+
+ <h3 id="secondweek">第二周</h3>
+
+<p>本周主要学习了:</p>
+<p>1.计算机三级网络技术部分知识；</p>
+<p>2.Cisco Packet Tracer的基本操作及命令行操作；</p>
+<p>3.设计并制作了一个小公司的网站；</p>
+
+ <h3 id="thirdweek">第三、四周</h3>
+
+<p>这两周:</p>
+<p>1.重新设计并开发了阳光网站签到系统2.0版本；</p>
+<p>2.学习了Ionic，跨平台制作APP，目前正在结合Andiord Studio和Nodejs学习开发项目；</p>
+
+
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/wxf19951001/note">Note</a> is maintained by <a href="https://github.com/wxf19951001">wxf19951001</a>.</span>
+
+        <span class="site-footer-credits">Copyright © 2016 雪峰出品 版权所有</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>

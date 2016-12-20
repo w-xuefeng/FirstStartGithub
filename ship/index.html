@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>行星与飞船</title>
+		<style type="text/css">
+		body {
+				margin: 0;
+				padding: 0;
+				background: black;
+			}
+			
+			.earth {
+				width: 350px;
+				height: 350px;
+				margin: 0 auto;
+				border-radius: 350px;
+				background: url(img/Earth.jpg) no-repeat center;
+				background-size: cover;
+			}
+			
+			button {
+				cursor: pointer;
+				margin: 5px;
+			}
+			
+			.line {
+				width: 400px;
+				height: 400px;
+				margin: 100px auto auto auto;
+				border-radius: 400px;
+				border: 2px solid white;
+			}
+			
+			#control-main {
+				width: 500px;
+				height: 50px;
+				position: absolute;
+				top: 30%;
+				left:10%
+			}
+			
+			.ship{
+				display: block;				
+				width: 50px;
+				font-size: 1em;
+				height: 50px;
+				text-align: center;
+				background: dodgerblue;
+				border-radius: 50px;
+				float: left;
+				color: #fff;
+				line-height: 25px;
+				animation: rotate 15s linear infinite;
+			}
+			
+			.run {
+				transform-origin: 110px 202px
+			}
+			
+			@keyframes rotate {
+				0% {
+					transform: translateX(95px) translateY(-5px) rotate(0deg);
+				}
+				100% {
+					transform: translateX(95px) translateY(-5px) rotate(360deg);
+				}
+			}
+		}
+		</style>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+
+		<div class="line" id="line">
+			<div id="asd"></div>
+			<div class="earth"></div>
+		</div>
+
+		<div id="control-main">
+			<button onclick="show();">创建飞船</button><br/>
+			<button onclick="run();">飞行</button><br/>
+			<button onclick="stop();">停止并补充燃料</button><br/>
+			<button onclick="huimie();">自毁</button>
+		</div>
+
+	</body>
+	<script type="text/javascript">	
+
+	
+	var i=100;
+
+		function show(){			
+			var asd = document.getElementById("asd");
+			var html = "<div id='ship' class='ship'>燃料<br/>100%</div>";	
+			asd.innerHTML += html;		
+			i=100;
+		}	
+		
+		function stop(){
+			var Ship = document.getElementById("ship");
+			$("#ship").removeClass("run");			 
+			 int = setInterval(function(){
+				Ship.innerHTML = "燃料<br/>"+(++i)+"%";
+				if(i==100){
+				int=clearInterval(int);
+				alert("燃料加满了！！！");									
+				}				
+				},100);				
+				
+		}
+		function run(){	
+				var Ship = document.getElementById("ship");
+				$("#ship").addClass("run");				
+				var s=setInterval(function(){
+				Ship.innerHTML = "燃料<br/>"+(--i)+"%";
+				if(i==0){
+				$("#ship").removeClass("run");
+				s=clearInterval(s);
+				alert("没有燃料啦！！！");
+				}				
+				},100);
+				
+		}
+		function huimie(){	
+			$("#ship").removeClass("run").css("display","none");
+			var asd = document.getElementById("asd");
+			var html = " ";	
+			asd.innerHTML = html;		
+			i=100;
+		}
+	</script>
+
+</html>

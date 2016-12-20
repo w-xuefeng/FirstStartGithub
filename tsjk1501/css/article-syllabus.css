@@ -1,0 +1,149 @@
+@charset "utf-8";
+
+/* CSS Document */
+
+* {
+	font-family: "微软雅黑";
+}
+
+body {
+	background: url(../img/syllabus-background.jpg);
+	background-repeat: no-repeat;
+	background-color: #4d9ec9;
+	background-position: bottom;
+	background-size: cover;
+	background-attachment: fixed;
+}
+
+.syllabus-banner {
+	height: auto;
+	width: auto;
+}
+
+.lesson-main {
+	height: 900px;
+	width: 1230px;
+	padding-top: 10px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 30px auto;
+}
+
+.lesson-nav {
+	float: left;
+	width: 200px;
+	height: 550px;
+	margin: 10px 0px;
+}
+
+.lesson-nav>li {
+	width: 200px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	margin-top: 20px;
+	border: 2px solid #FC0;
+	border-radius: 2px;
+	cursor: pointer;
+	opacity: 0.85;
+}
+
+.lesson-nav>li:hover {
+	-webkit-transition: -webkit-transform 0.3s ease;
+	-moz-transition: -moz-transform 0.3s ease;
+	-ms-transition: -ms-transform 0.3s ease;
+	transform: scale(1.05, 1.05);
+	-ms-transform: scale(1.05, 1.05);
+	-webkit-transform: scale(1.05, 1.05);
+	color: #fff;
+	background: #F63;
+	opacity: 0.65;
+}
+
+.on-nav {
+	margin-left: 24px;
+	background: #F63;
+	color: #fff;
+}
+
+.lessonchart {
+	float: right;
+	width: 1000px;
+	height: 800px;
+	border: 2px solid #FC0;
+	background: url(../img/lesson-background.jpg);
+	background-repeat: no-repeat;
+}
+
+.lessontable {
+	text-align: center;
+	filter: alpha(opacity=75);
+	opacity: 0.75;
+	cursor: pointer;
+}
+
+.lessontable:hover {
+	filter: alpha(opacity=100);
+	opacity: 1;
+}
+
+.lessontable tr td {
+	border-radius: 10px;
+}
+
+.lessontable tr td:hover {
+	-webkit-transition: -webkit-transform 0.2s ease;
+	-moz-transition: -moz-transform 0.2s ease;
+	-ms-transition: -ms-transform 0.2s ease;
+	transform: scale(1.14, 1.14);
+	-ms-transform: scale(1.14, 1.14);
+	-webkit-transform: scale(1.14, 1.14);
+	color: #FFF;
+	cursor: pointer;
+}
+
+.lessonCS {
+	color: #FFF;
+}
+
+.lessonCS:hover {
+	color: #FFC;
+}
+
+.A2015-2016 {
+	display: none;
+}
+
+.A2016-2017 {
+	display: none;
+}
+
+.A2017-2018 {
+	display: none;
+}
+
+.A2018-2019 {
+	display: none;
+}
+
+.B2016-2017 {
+	display: none;
+}
+
+.B2017-2018 {
+	display: none;
+}
+
+.B2018-2019 {
+	display: none;
+}
+
+.bottom {
+	top: 1242px;
+	background: #000;
+}
+
+#bottom {
+	top: 1242px;
+}

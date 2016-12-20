@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>北京2014年空气质量数据表</title>
+		<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+	</head>
+	<style type="text/css">
+	body{margin:0px;padding:0px;font-family:"微软雅黑";}
+ 	a{ text-decoration:none;color:black;font-family:"微软雅黑";}
+ 	a:hover{color:#000;text-decoration:none;}
+	.nav{height:32px; width:100%;margin:0 auto; overflow:hidden;position: absolute;top: 0px;z-index: 105;opacity: 0.25;}
+  	.nav:hover{opacity: 1;}
+ 	.nav>li{list-style:none;height:30px; width:145px;border:1px solid rgba(0,0,0,0.75); text-align:center; line-height:30px;float: left;margin-right: 20px}
+ 	.nav>li:hover{ 	
+ 	background:rgba(204,201,201,1.00); 
+ 	cursor:pointer;color:#000;
+ 	border: 1px solid #fff;}
+		ul {list-style: none;
+			margin: 0;padding: 0;	
+		}
+		
+		li span{border-radius: 5px;}
+		
+		.aqi-chart-tooltip li{
+			border: 1px solid #ccc;
+			padding: 10px;
+			display: inline-block;
+			cursor: pointer;	
+		}
+		.aqi-chart-tooltip li:hover{background:#04ff62;}
+		.aqi-chart span{
+			display: inline-block;
+			width:100px;
+			height: 20px;}
+		.aqi-bad{background: black;}
+		.aqi-medium{background: red;}
+		.aqi-slight{background: deepskyblue;}
+		.aqi-good{background: greenyellow;}
+		span:hover{
+			 -webkit-transition: -webkit-transform 0.2s ease;
+		     -moz-transition: -moz-transform 0.2s ease;
+		     -ms-transition: -ms-transform 0.2s ease;
+		     transform: scale(1.04, 1.04);
+		     -ms-transform: scale(1.04, 1.04);
+		     -webkit-transform: scale(1.04, 1.04);
+			 cursor:pointer;	
+			}
+		#bad{border-bottom:2px solid black;}
+		#medium{border-bottom:2px solid red;}
+		#slight{border-bottom:2px solid deepskyblue;}
+		#good{border-bottom:2px solid greenyellow;}
+		.on{
+			background:#707887;
+			filter:alpha(opacity=50);
+			opacity:0.5;
+			}
+	</style>
+
+	<body>
+	
+
+
+	<div class="nav">
+	    <li><a href="../wxf.shitoujiandaobu/index.html">石头剪刀布</a></li>
+	    <li><a href="../wxf.beijingAQI/index.html">BeijingAQI</a></li>
+	    <li><a href="../wxf.liuxinglaixi/index.html">流星来袭</a></li>
+	    <li><a href="../AQI/echarts/index.html">空气质量监测表</a></li>
+	    <li><a href="../tsjk1501/index.html">tsjk1501</a></li>
+	    <li><a href="../About-HTTP/index.html">http协议笔记</a></li>
+	</div>
+		
+		
+		
+		
+		
+		<br/><br/><br/><br/>
+		<div style="margin:0 auto;width:800px;height:auto;">
+		<ul class="aqi-chart-tooltip">
+			<li id="bad">严重污染</li>
+			<li id="medium">中度污染</li>
+			<li id="slight">轻度污染</li>
+			<li id="good">优良</li>
+		</ul>
+		<br>
+		<ul id="chart-wrapper" class="aqi-chart">
+		</ul>
+		</div>
+	</body>
+	<script>
+		//定义数据 开始………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………	
+		var aqiSourceData =[
+		[344,325,384,120,2,11,158,158,225,500,200,210,48,220,110,200,345,458,55,4,11,222,10,22,23,54,288,100,150,35,254],
+		[22,23,444,120,220,122,225,188,25,2,20,100,208,20,10,200,345,108,55,204,115,520,10,220,123,104,288,155,225,225,144],
+		[105,157,147,157,154,208,63,131,323,304,332,86,452,375,355,353,78,96,34,53,55,37,263,178,64,52,200,67,264,56,123],
+		[415,157,17,157,154,208,263,131,323,304,332,286,452,375,355,353,278,296,134,253,355,137,263,178,64,52,200,267,224,256,123],
+		[115,115,147,111,154,208,116,131,133,304,132,186,452,375,355,353,278,296,234,253,255,237,263,178,64,52,200,117,64,56,23],
+		[410,157,117,57,14,208,63,11,23,434,332,38,442,175,355,353,83,196,14,353,355,327,363,178,64,52,200,267,264,26,223],
+		[22,2,444,120,220,122,225,88,5,2,20,100,208,20,10,20,345,108,55,204,115,520,10,220,123,104,28,155,25,225,14],
+		[105,157,17,157,154,208,63,131,323,304,332,86,452,375,35,353,78,96,34,53,55,37,63,178,64,52,100,67,264,56,23],
+		[415,157,17,157,154,208,23,131,323,304,332,286,45,375,355,353,278,296,34,53,55,37,263,178,64,52,200,267,24,256,123],
+		[15,15,147,1,154,208,6,11,33,304,32,86,452,375,55,353,78,96,34,53,55,3,263,178,64,52,200,7,264,56,123],
+		[410,157,117,157,14,208,163,111,323,434,332,38,42,175,355,353,13,196,134,253,155,327,23,178,64,52,200,26,264,226,223],
+		[110,357,317,157,224,208,263,211,323,434,332,138,242,2175,355,353,213,196,134,453,455,427,23,478,464,452,400,446,464,426,423],
+		]
+		//定义数据 结束………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+		
+		
+		//定义标准 开始………………………………………………………………	
+		var AQIgoodMAX = 100;
+		var AQIslightMAX = 200;
+		var AQImediumMAX = 300;
+		//定义标准 结束………………………………………………………………
+		
+		//转换数据格式 开始……………………………………………………………………………………………………………………………………………………………………………………………………………………………………	
+		function transDataFormat(src)
+			{
+			var outputData = {
+				"aqiBad":0,
+				"aqiMedium":0,
+				"aqiSlight":0,
+				"aqiGood":0		
+				};
+			
+			for (var i = 0, len = src.length; i < len;i++ )
+				{
+				if(src[i] < AQIgoodMAX){
+					outputData.aqiGood++;
+				}else if(src[i] < AQIslightMAX){
+					outputData.aqiSlight++;
+				}else if(src[i] < AQImediumMAX){
+					outputData.aqiMedium++;
+				}else{
+					outputData.aqiBad++;
+					}
+				}	
+				return outputData;
+			}
+		//转换数据格式 结束……………………………………………………………………………………………………………………………………………………………………………………………………………………………………	
+		
+
+		//图表单位长度初始值 开始………………………………………………
+			var a = 20;
+			var b = 20;
+			var c = 20;
+			var d = 20;	
+		//图表单位长度初始值 结束………………………………………………
+		
+//生成图表 开始…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+		//生成每月AQI数据样式 开始
+		function renderMonthChart(month,data)
+		{	var returnHtml = [];
+				returnHtml += '<li>';
+				returnHtml += month + ':';
+				returnHtml += '<span class="aqi-bad" style="width:'+ data.aqiBad * a +'px"></span>';
+				returnHtml += '<span class="aqi-medium" style="width:'+ data.aqiMedium * b+'px"></span>';
+				returnHtml += '<span class="aqi-slight" style="width:'+ data.aqiSlight * c +'px"></span>';
+				returnHtml += '<span class="aqi-good" style="width:'+ data.aqiGood  * d +'px"></span>';
+				returnHtml += '</li>';
+				return returnHtml;
+		}
+		//生成每月AQI数据样式 结束	
+		//图表生成函数 开始
+		function aqiChartGenerate()
+		{
+			var chartHtml = "";
+			for(var i = 0,len = aqiSourceData.length;i < len; i++)
+				{
+				//统一格式使对齐 开始
+				if(i < 9){var monthText = (i + 1) + ' 月';}
+				else{var monthText = (i + 1) + '月';}
+				//统一格式使对齐 结束
+				var monthData = transDataFormat(aqiSourceData[i]) ;
+				chartHtml += renderMonthChart(monthText,monthData);
+				}
+				document.getElementById("chart-wrapper").innerHTML = chartHtml;
+			}
+		//图表生成函数 结束
+		aqiChartGenerate();//执行图表生成函数
+//生成图表 结束…………………………………………………………………………………………………………………………………………………………………………………………………………………………………………	
+		
+		
+	//定义交互函数 开始……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+		var bad = document.getElementById("bad");
+		var medium = document.getElementById("medium");
+		var slight = document.getElementById("slight");
+		var good = document.getElementById("good");		
+				//定义点击次数初始值 开始………………………………………	
+				var e = 1;
+				var f = 1;
+				var g = 1;
+				var h = 1;
+		 		//定义点击次数初始值 结束………………………………………	
+		bad.onclick = function(){e++;if(e%2==0){a=0}else{a=20};aqiChartGenerate();};
+		medium.onclick = function(){f++;if(f%2==0){b=0}else{b=20};aqiChartGenerate();};
+		slight.onclick = function(){g++;if(g%2==0){c=0}	else{c=20};aqiChartGenerate();};
+	    good.onclick = function(){h++;if(h%2==0){d=0}else{d=20};aqiChartGenerate();};
+	//定义交互函数 结束……………………………………………………………………………………………………………………………………………………………………………………………………………………………………………
+
+
+
+//交互样式设置 开始………………………………………
+$(document).ready(function(){
+ $('#bad').click(function(){
+	$(this).toggleClass("on"); 
+ });
+  $('#medium').click(function(){
+	$(this).toggleClass("on"); 
+ });
+  $('#slight').click(function(){
+	$(this).toggleClass("on"); 
+ });
+  $('#good').click(function(){
+	$(this).toggleClass("on"); 
+ });
+});
+//交互样式设置 结束………………………………………
+	</script>
+
+</html>

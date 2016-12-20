@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>AQI-ECharts</title>
+		<link rel="stylesheet" type="text/css" href="../css/css.css" />
+		<script type="text/javascript" src="../js/jquery.js"></script>
+		<script src="../build/dist/echarts.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<div class="nav">
+
+	    <li><a href="../../wxf.shitoujiandaobu/index.html">石头剪刀布</a></li>
+	    <li><a href="../../wxf.beijingAQI/index.html">BeijingAQI</a></li>
+	    <li><a href="../../wxf.liuxinglaixi/index.html">流星来袭</a></li>
+	    <li><a href="../../AQI/echarts/index.html">空气质量监测表</a></li>
+	    <li><a href="../../tsjk1501/index.html">tsjk1501</a></li>
+	    <li><a href="../../About-HTTP/index.html">http协议笔记</a></li>
+
+		</div>
+		<div class="map" id="map"></div>
+		<div class="title">
+			<div class="TA">
+				<div class="T-huanxingtu border">环形图</div>
+				<div class="T-bingzhuangtu">饼状图</div>
+			</div>
+			<div class="TB">
+				<div class="T-zhexiantu border">折线图</div>
+				<div class="T-zhuzhuangtu">柱状图</div>
+			</div>
+		</div>
+		<br/>
+		<div class="charts-Ares">
+
+			<div class="chartsA">
+				<div id="huanxingtu" style="height:400px;width:500px"></div>
+				<div id="bingzhuangtu" class="hidden" style="height:400px;width:500px"></div>
+
+			</div>
+
+			<div class="chartsB">
+				<div id="zhexiantu" style="height:400px;width:500px"></div>
+				<div id="zhuzhuangtu" class="hidden" style="height:400px;width:500px"></div>
+			</div>
+
+		</div>
+
+	</body>
+	<script type="text/javascript">
+		//================定义全局变量 月份与AQI值（地图除外）及数据处理   开始================
+		var Month = ["一","二","三","四","五","六","七","八","九","十","十一","十二"];//定义月份
+		var AQIData = [
+			[122, 117, 111, 153, 119, 184, 143, 129, 143, 187, 143, 42, 310, 109,348, 381, 311, 304, 177, 37, 51, 153, 169, 185, 40, 77, 128, 61, 155, 93, 184],
+			[179, 105, 140, 150, 116, 158, 124, 102, 29, 35, 133, 150, 241, 311, 424, 339, 137, 395, 89, 208, 308, 313, 262, 309, 402, 330, 31, 106],
+			[57, 175, 267, 88, 38, 38, 36, 63, 191, 126, 108, 207, 36, 58, 62, 128, 11, 181, 386, 375, 37, 54, 82, 166, 241, 322, 294, 169, 72, 63, 172],
+			[240, 231, 263, 91, 64, 297, 133, 224, 94, 271, 88, 131, 97, 284, 132, 83, 121, 181, 83, 82, 68, 80, 149, 152, 175, 65, 74, 84, 118, 139],
+			[66, 48, 94, 55, 50, 99, 95, 102, 288, 72, 45, 60, 89, 55, 116, 92, 98, 112, 140, 11, 42, 91, 127, 101, 121, 65, 105, 80, 97, 140, 157],
+			[88, 62, 75, 98, 111, 288, 327, 256, 258, 90, 69, 63, 100, 83, 149, 367, 120, 387, 158, 71, 100, 59, 64, 97, 134, 173, 47, 50, 84, 121],
+			[124, 84, 238, 237, 267, 253, 210, 150, 59, 78, 60, 49, 29, 91, 211, 217, 333, 215, 116, 97, 51, 39, 63, 86, 109, 155, 160, 168, 164, 160, 244],
+			[16, 14, 151, 250, 248, 59, 114, 96, 133, 78, 51, 70, 45, 261, 73, 397, 96, 88, 19, 143, 178, 71, 142, 46, 45, 64, 90, 104, 98, 170, 87],
+			[126, 216, 236, 270, 120, 183, 196, 46, 75, 97, 109, 98, 293, 269, 345, 71, 75, 88, 102, 159, 134, 124, 66, 49, 139, 162, 51, 84, 78, 48],
+			[291, 275, 119, 211, 248, 247, 179, 309, 380, 351, 233, 25, 29, 372, 81, 73, 127, 194, 289, 254, 67, 100, 154, 263, 341, 85, 50, 84, 138, 203, 201],
+			[285, 29, 51, 126, 125, 34, 61, 91, 279, 92, 270, 242, 44, 54, 314, 105, 38, 78, 267, 342, 215, 50, 155, 103, 177, 279, 101, 113, 269, 209],
+			[255, 325, 356, 333, 342, 382, 374, 178, 367, 315, 339, 341, 364, 108, 108, 33, 94, 186, 57, 22, 39, 94, 99, 31, 42, 154, 234, 160, 134, 52, 46],
+		]; //定义数据
+		var AQILow = 0; //AQI较低天数
+		var AQIMedium= 0; //AQI中等天数
+		var AQIHigh = 0; //AQI较高天数
+		var Sum = []; //各月AQI合计值
+		var Ave = []; //各月AQI平均值 
+		 
+		 //=========处理数据   开始============
+		 for (i = 0; i < 12; i++) {
+			Sum[i] = 0;	Ave[i] = 0;
+			for (x = 0, len = AQIData[i].length; x < len; x++) {
+				aqi = AQIData[i][x];
+				if (aqi < 200) {AQILow++} 
+				else if (aqi < 300) {AQIMedium++} 
+				else {AQIHigh++};
+				Sum[i] += aqi;
+			}
+			Ave[i] = (Sum[i] / len).toFixed(2);
+			
+		} 
+		//====定义 占比 开始=====
+		 var zhanbiH = parseInt((AQIHigh/365)*100);
+		 var zhanbiM = parseInt((AQIMedium/365)*100);
+		 var zhanbiL = parseInt((AQILow/365)*100);
+		//====定义 占比  结束=====
+		 
+		 
+		 
+		 
+		 //=========处理数据   结束============ 
+		 
+		 //================定义全局变量 月份与AQI值（地图除外）及数据处理   结束================
+		 
+		 //===================Echarts代码开始=================================================
+		 
+		 require.config({
+		            paths: {
+		                echarts: '../build/dist'//调用框架的路径
+		            }
+		        });
+		        require(
+		            [
+		                'echarts',
+		                'echarts/chart/pie',//调用环形和饼状框架
+		                'echarts/chart/bar',//调用柱形图框架
+		                'echarts/chart/line',//调用折线图框架
+		                //'echarts/chart/funnel',//调用漏斗图框架,由于下面的工具箱设置为隐藏，故漏斗图在本次作业中不需要，若要开启工具箱并成功使用图表转换功能，则必须调用漏斗图框架
+		                'echarts/chart/map',//调用地图框架
+		            ],
+		            function (ec) {
+		                // 初始化echarts图表
+						var myChartHXT = ec.init(document.getElementById('huanxingtu')); //初始化环形图
+		                var myChartBZT = ec.init(document.getElementById('bingzhuangtu')); //初始化饼状图
+		                var myChartZXT = ec.init(document.getElementById('zhexiantu')); //初始化折线图
+		                var myChartZZT = ec.init(document.getElementById('zhuzhuangtu')); //初始化柱状图
+						var myChartMAP = ec.init(document.getElementById('map')); //初始化中国地图
+		               
+		               
+		              //===================== 定义环形图================
+		               optionHXT = {//定义环形图
+					    tooltip : {//提示框，鼠标悬浮交互时的信息提示
+					    	show:true,
+					        trigger: 'item',//触发类型
+					        formatter: "{a} <br/>{b} : {c} ({d}%)"//内容格式器
+					    },
+					    legend: {//图例
+					        orient : 'vertical',//布局方式
+					        x : 'left',//水平安放位置
+					        data:[
+					        'AQI>200'+'         '+ (AQIMedium + AQIHigh) +'天'+'  ' + '占比' + (zhanbiH + zhanbiM) + '%',
+					        'AQI<200'+'         '+ (AQILow) +'天'+'  ' + '占比' + (zhanbiL) + '%'
+					        ]//图例内容数组
+					    },
+					    toolbox: {//工具箱
+					        show : false,//true为显示，false为隐藏，本次作业不需显示
+					        feature : {//工具箱自定义功能回调处理
+					            mark : {show: true},//辅助线标志
+					            dataView : {show: true, readOnly: false},//数据视图
+					            magicType : {//动态类型切换
+					                show: true, 
+					                type: ['pie', 'funnel'],//图表类型
+					                option: {//可传入切换是动态修改的配置，将复写series内的数组项
+					                    funnel: {
+					                        x: '25%',
+					                        width: '50%',
+					                        funnelAlign: 'center',
+					                        max: 1548
+					                    }
+					                }
+					            },
+					            restore : {show: true},//复位原始图表
+					            saveAsImage : {show: true}//将图表存储为图片
+					        }
+					    },
+					    calculable : false,//是否启用拖拽重计算特性,由于上面隐藏工具箱功能，无法复位原始图表，故不开启此功能
+					    series : [//驱动图表生成的数据内容数组
+					        {
+					            name:'AQI',//系列名称，如启用legend，该值将被legend.data索引相关
+					            type:'pie',//图表类型，必要参数
+					            radius : ['45%', '70%'],//半径，支持绝对值（px）和百分比，百分比计算比，min(width, height) / 2 * 75%， 传数组实现环形图，[内半径，外半径]
+					            itemStyle : {//图形样式
+					                normal : {//常规样式
+					                    label : {//标签
+					                        show : false
+					                    },
+					                    labelLine : {//标签视觉引导线，默认显示
+					                        show : false
+					                    }
+					                },
+					                emphasis : {//强调样式
+					                    label : {//标签
+					                        show : true,
+					                        position : 'center',
+					                        textStyle : {
+					                            fontSize : '30',
+					                            fontWeight : 'bold'
+					                        }
+					                    }
+					                }
+					            },
+					            data:[//系列中的数据内容数组，折线图以及柱状图时数组长度等于所使用类目轴文本标签数组axis.data的长度，并且他们间是一一对应的
+					                {value:AQIMedium+AQIHigh, name:'AQI>200'+'         '+ (AQIMedium + AQIHigh) +'天'+'  ' + '占比' + (zhanbiH + zhanbiM) + '%'},
+					                {value:AQILow, name:'AQI<200'+'         '+ (AQILow) +'天'+'  ' + '占比' + (zhanbiL) + '%'},
+					               
+					            ]
+					        }
+					    ]
+					    
+					};
+					                    
+		
+		
+		//===================== 定义饼状图================
+		                optionBZT = {//定义饼状图
+						   tooltip : {//提示框，鼠标悬浮交互时的信息提示
+						        trigger: 'item',//触发类型
+						        formatter: "{a} <br/>{b} : {c} ({d}%)"//内容格式器
+						    },
+						    legend: {//图例
+						        orient : 'vertical',//布局方式
+						        x : 'left',//水平安放位置
+						        data:[
+						        'AQI>300' + '              ' + AQIHigh +'天'+'    ' + '占比' + zhanbiH + '%',
+						        '200<AQI<300' + '     ' + AQIMedium +'天'+'    ' + '占比' + zhanbiM + '%',
+						        'AQI<200' + '              ' + AQILow +'天'+'   ' + '占比' + zhanbiL + '%'	
+						        ]//图例内容数组
+						    },
+						    toolbox: {//工具箱
+						        show : false,//true为显示，false为隐藏，本次作业不需显示
+						        feature : {//工具箱自定义功能回调处理
+						            mark : {show: true},//辅助线标志
+						            dataView : {show: true, readOnly: false},//数据视图
+						            magicType : {//动态类型切换
+						                show: true, 
+						                type: ['pie', 'funnel'],//图表类型
+						                option: {//可传入切换是动态修改的配置，将复写series内的数组项
+						                    funnel: {
+						                        x: '25%',
+						                        width: '50%',
+						                        funnelAlign: 'left',
+						                        max: 1548
+						                    }
+						                }
+						            },
+						            restore : {show: true},//复位原始图表
+						            saveAsImage : {show: true}//将图表存储为图片
+						        }
+						    },
+						    calculable : false,//是否启用拖拽重计算特性,由于上面隐藏工具箱功能，无法复位原始图表，故不开启此功能
+						    series : [//驱动图表生成的数据内容数组
+						        {
+						            name:'AQI',//系列名称，如启用legend，该值将被legend.data索引相关
+						            type:'pie',//图表类型，必要参数
+						            radius : '55%',//半径
+						            center: ['50%', '60%'],//圆心坐标，支持绝对值（px）和百分比，百分比计算min(width, height) * 50%
+						            data:[//系列中的数据内容数组，折线图以及柱状图时数组长度等于所使用类目轴文本标签数组axis.data的长度，并且他们间是一一对应的
+						            {value:AQILow, name: 'AQI<200' + '              ' + AQILow +'天'+'   ' + '占比' + zhanbiL + '%'},
+						            {value:AQIMedium, name:'200<AQI<300' + '     ' + AQIMedium +'天'+'    ' + '占比' + zhanbiM + '%'},			                
+					                {value:AQIHigh, name:'AQI>300' + '              ' + AQIHigh +'天'+'    ' + '占比' + zhanbiH + '%'},
+						               
+						            ]
+						        }
+						    ]
+						};
+						                    
+		
+		
+		
+		//===================== 定义折线图================
+		                var optionZXT = {//定义折线图
+		                    tooltip: {//提示框，鼠标悬浮交互时的信息提示
+		                        show: true
+		                    },
+		                    legend: {//图例
+		                        data:['AQI']
+		                    },
+		                    xAxis : [//X轴
+		                        {
+		                            type : 'category',//坐标轴类型，横轴默认为类目型'category'
+		                            data : Month//横轴数据
+		                        }
+		                    ],
+		                    yAxis : [//y轴
+		                        {
+		                            type : 'value'//坐标轴类型，纵轴默认为数值型'value'
+		                        }
+		                    ],
+		                    series : [//驱动图表生成的数据内容数组
+		                        {
+		                            "name":"AQI",//系列名称，如启用legend，该值将被legend.data索引相关
+		                            "type":"line",//图表类型，必要参数
+		                            "data":Ave//纵轴数据
+		                        }
+		                    ]
+		                };
+		                
+		                
+		 //===================== 定义柱状图================               
+		                var optionZZT = {//定义柱状图
+		                    tooltip: {//提示框，鼠标悬浮交互时的信息提示
+		                        show: true
+		                    },
+		                    legend: {//图例
+		                        data:['AQI']
+		                    },
+		                    xAxis : [//X轴
+		                        {
+		                            type : 'category',//坐标轴类型，横轴默认为类目型'category'
+		                            data : Month//横轴数据
+		                        }
+		                    ],
+		                    yAxis : [//y轴
+		                        {
+		                            type : 'value'//坐标轴类型，纵轴默认为数值型'value'
+		                        }
+		                    ],
+		                    series : [//驱动图表生成的数据内容数组
+		                        {	
+		                            "name":"AQI",//系列名称，如启用legend，该值将被legend.data索引相关
+		                            "type":"bar",//图表类型，必要参数
+		                            "data":Ave//纵轴数据
+		                        }
+		                    ]
+		                };
+		  //===================定义地图=================      
+		        var	optionMAP = {//定义地图
+		    title : {//标题
+		        text: '中国主要城市空气质量地图图表',//主标题文本
+		        x:'center'
+		    },
+		    tooltip : {//提示框，鼠标悬浮交互时的信息提示
+		        trigger: 'item'
+		    },
+		    legend: {//图例
+		        orient: 'vertical',
+		        x:'left',
+		        data:['pm2.5']
+		    },
+		    dataRange: {//值域选择
+		        min : 0,//最小值
+		        max : 500,//最大值
+		        calculable : true,//是否启用拖拽重计算特性
+		        color: ['maroon','purple','red','orange','yellow','lightgreen']
+		    },
+		    toolbox: {//工具箱
+		        show : false,//true为显示，false为隐藏，本次作业不需显示
+		        orient : 'vertical',//布局方式
+		        x: 'right',//水平安放位置
+		        y: 'center',//垂直安放位置
+		        feature : {//工具箱自定义功能回调处理
+		            mark : {show: true},//辅助线标志
+		            dataView : {show: true, readOnly: false},//数据视图
+		            restore : {show: true},//复位原始图表
+		            saveAsImage : {show: true}//将图表存储为图片
+		        }
+		    },
+		    series : [//驱动图表生成的数据内容数组
+		        {
+		            name: 'pm2.5',//系列名称，如启用legend，该值将被legend.data索引相关
+		            type: 'map',//图表类型
+		            mapType: 'china',//地图类型，支持world，china及全国34个省市自治区
+		            hoverable: false,//非数值显示（如仅用于显示标注标线时），可以通过hoverable:false关闭区域悬浮高亮
+		            roam:true,
+		            data : [],//数据
+		            markPoint : {//标注
+		                symbolSize: 5,       // 标注大小，半宽（半径）参数，当图形为方向或菱形则总宽度为symbolSize * 2
+		                itemStyle: {
+		                    normal: {
+		                        borderColor: '#87cefa',
+		                        borderWidth: 1,            // 标注边线线宽，单位px，默认为1
+		                        label: {
+		                            show: false
+		                        }
+		                    },
+		                    emphasis: {
+		                        borderColor: '#1e90ff',
+		                        borderWidth: 5,
+		                        label: {
+		                            show: false
+		                        }
+		                    }
+		                },
+		                data : [//数据
+		                    {name: "海门", value: 9},
+		                    {name: "鄂尔多斯", value: 12},
+		                    {name: "招远", value: 12},
+		                    {name: "舟山", value: 12},
+		                    {name: "齐齐哈尔", value: 14},
+		                    {name: "盐城", value: 15},
+		                    {name: "赤峰", value: 16},
+		                    {name: "青岛", value: 18},
+		                    {name: "乳山", value: 18},
+		                    {name: "金昌", value: 19},
+		                    {name: "泉州", value: 21},
+		                    {name: "莱西", value: 21},
+		                    {name: "日照", value: 21},
+		                    {name: "胶南", value: 22},
+		                    {name: "南通", value: 23},
+		                    {name: "拉萨", value: 24},
+		                    {name: "云浮", value: 24},
+		                    {name: "梅州", value: 25},
+		                    {name: "文登", value: 25},
+		                    {name: "上海", value: 25},
+		                    {name: "攀枝花", value: 25},
+		                    {name: "威海", value: 25},
+		                    {name: "承德", value: 25},
+		                    {name: "厦门", value: 26},
+		                    {name: "汕尾", value: 26},
+		                    {name: "潮州", value: 26},
+		                    {name: "丹东", value: 27},
+		                    {name: "太仓", value: 27},
+		                    {name: "曲靖", value: 27},
+		                    {name: "烟台", value: 28},
+		                    {name: "福州", value: 29},
+		                    {name: "瓦房店", value: 30},
+		                    {name: "即墨", value: 30},
+		                    {name: "抚顺", value: 31},
+		                    {name: "玉溪", value: 31},
+		                    {name: "张家口", value: 31},
+		                    {name: "阳泉", value: 31},
+		                    {name: "莱州", value: 32},
+		                    {name: "湖州", value: 32},
+		                    {name: "汕头", value: 32},
+		                    {name: "昆山", value: 33},
+		                    {name: "宁波", value: 33},
+		                    {name: "湛江", value: 33},
+		                    {name: "揭阳", value: 34},
+		                    {name: "荣成", value: 34},
+		                    {name: "连云港", value: 35},
+		                    {name: "葫芦岛", value: 35},
+		                    {name: "常熟", value: 36},
+		                    {name: "东莞", value: 36},
+		                    {name: "河源", value: 36},
+		                    {name: "淮安", value: 36},
+		                    {name: "泰州", value: 36},
+		                    {name: "南宁", value: 37},
+		                    {name: "营口", value: 37},
+		                    {name: "惠州", value: 37},
+		                    {name: "江阴", value: 37},
+		                    {name: "蓬莱", value: 37},
+		                    {name: "韶关", value: 38},
+		                    {name: "嘉峪关", value: 38},
+		                    {name: "广州", value: 38},
+		                    {name: "延安", value: 38},
+		                    {name: "太原", value: 39},
+		                    {name: "清远", value: 39},
+		                    {name: "中山", value: 39},
+		                    {name: "昆明", value: 39},
+		                    {name: "寿光", value: 40},
+		                    {name: "盘锦", value: 40},
+		                    {name: "长治", value: 41},
+		                    {name: "深圳", value: 41},
+		                    {name: "珠海", value: 42},
+		                    {name: "宿迁", value: 43},
+		                    {name: "咸阳", value: 43},
+		                    {name: "铜川", value: 44},
+		                    {name: "平度", value: 44},
+		                    {name: "佛山", value: 44},
+		                    {name: "海口", value: 44},
+		                    {name: "江门", value: 45},
+		                    {name: "章丘", value: 45},
+		                    {name: "肇庆", value: 46},
+		                    {name: "大连", value: 47},
+		                    {name: "临汾", value: 47},
+		                    {name: "吴江", value: 47},
+		                    {name: "石嘴山", value: 49},
+		                    {name: "沈阳", value: 50},
+		                    {name: "苏州", value: 50},
+		                    {name: "茂名", value: 50},
+		                    {name: "嘉兴", value: 51},
+		                    {name: "长春", value: 51},
+		                    {name: "胶州", value: 52},
+		                    {name: "银川", value: 52},
+		                    {name: "张家港", value: 52},
+		                    {name: "三门峡", value: 53},
+		                    {name: "锦州", value: 54},
+		                    {name: "南昌", value: 54},
+		                    {name: "柳州", value: 54},
+		                    {name: "三亚", value: 54},
+		                    {name: "自贡", value: 56},
+		                    {name: "吉林", value: 56},
+		                    {name: "阳江", value: 57},
+		                    {name: "泸州", value: 57},
+		                    {name: "西宁", value: 57},
+		                    {name: "宜宾", value: 58},
+		                    {name: "呼和浩特", value: 58},
+		                    {name: "成都", value: 58},
+		                    {name: "大同", value: 58},
+		                    {name: "镇江", value: 59},
+		                    {name: "桂林", value: 59},
+		                    {name: "张家界", value: 59},
+		                    {name: "宜兴", value: 59},
+		                    {name: "北海", value: 60},
+		                    {name: "西安", value: 61},
+		                    {name: "金坛", value: 62},
+		                    {name: "东营", value: 62},
+		                    {name: "牡丹江", value: 63},
+		                    {name: "遵义", value: 63},
+		                    {name: "绍兴", value: 63},
+		                    {name: "扬州", value: 64},
+		                    {name: "常州", value: 64},
+		                    {name: "潍坊", value: 65},
+		                    {name: "重庆", value: 66},
+		                    {name: "台州", value: 67},
+		                    {name: "南京", value: 67},
+		                    {name: "滨州", value: 70},
+		                    {name: "贵阳", value: 71},
+		                    {name: "无锡", value: 71},
+		                    {name: "本溪", value: 71},
+		                    {name: "克拉玛依", value: 72},
+		                    {name: "渭南", value: 72},
+		                    {name: "马鞍山", value: 72},
+		                    {name: "宝鸡", value: 72},
+		                    {name: "焦作", value: 75},
+		                    {name: "句容", value: 75},
+		                    {name: "北京", value: 79},
+		                    {name: "徐州", value: 79},
+		                    {name: "衡水", value: 80},
+		                    {name: "包头", value: 80},
+		                    {name: "绵阳", value: 80},
+		                    {name: "乌鲁木齐", value: 84},
+		                    {name: "枣庄", value: 84},
+		                    {name: "杭州", value: 84},
+		                    {name: "淄博", value: 85},
+		                    {name: "鞍山", value: 86},
+		                    {name: "溧阳", value: 86},
+		                    {name: "库尔勒", value: 86},
+		                    {name: "安阳", value: 90},
+		                    {name: "开封", value: 90},
+		                    {name: "济南", value: 92},
+		                    {name: "德阳", value: 93},
+		                    {name: "温州", value: 95},
+		                    {name: "九江", value: 96},
+		                    {name: "邯郸", value: 98},
+		                    {name: "临安", value: 99},
+		                    {name: "兰州", value: 99},
+		                    {name: "沧州", value: 100},
+		                    {name: "临沂", value: 103},
+		                    {name: "南充", value: 104},
+		                    {name: "天津", value: 105},
+		                    {name: "富阳", value: 106},
+		                    {name: "泰安", value: 112},
+		                    {name: "诸暨", value: 112},
+		                    {name: "郑州", value: 113},
+		                    {name: "哈尔滨", value: 114},
+		                    {name: "聊城", value: 116},
+		                    {name: "芜湖", value: 117},
+		                    {name: "唐山", value: 119},
+		                    {name: "平顶山", value: 119},
+		                    {name: "邢台", value: 119},
+		                    {name: "德州", value: 120},
+		                    {name: "济宁", value: 120},
+		                    {name: "荆州", value: 127},
+		                    {name: "宜昌", value: 130},
+		                    {name: "义乌", value: 132},
+		                    {name: "丽水", value: 133},
+		                    {name: "洛阳", value: 134},
+		                    {name: "秦皇岛", value: 136},
+		                    {name: "株洲", value: 143},
+		                    {name: "石家庄", value: 147},
+		                    {name: "莱芜", value: 148},
+		                    {name: "常德", value: 152},
+		                    {name: "保定", value: 153},
+		                    {name: "湘潭", value: 154},
+		                    {name: "金华", value: 157},
+		                    {name: "岳阳", value: 169},
+		                    {name: "长沙", value: 175},
+		                    {name: "衢州", value: 177},
+		                    {name: "廊坊", value: 193},
+		                    {name: "菏泽", value: 194},
+		                    {name: "合肥", value: 229},
+		                    {name: "武汉", value: 273},
+		                    {name: "大庆", value: 279}
+		                ]
+		            },
+		            geoCoord: {//通过绝对经纬度指定地区的名称文本位置
+		                "海门":[121.15,31.89],
+		                "鄂尔多斯":[109.781327,39.608266],
+		                "招远":[120.38,37.35],
+		                "舟山":[122.207216,29.985295],
+		                "齐齐哈尔":[123.97,47.33],
+		                "盐城":[120.13,33.38],
+		                "赤峰":[118.87,42.28],
+		                "青岛":[120.33,36.07],
+		                "乳山":[121.52,36.89],
+		                "金昌":[102.188043,38.520089],
+		                "泉州":[118.58,24.93],
+		                "莱西":[120.53,36.86],
+		                "日照":[119.46,35.42],
+		                "胶南":[119.97,35.88],
+		                "南通":[121.05,32.08],
+		                "拉萨":[91.11,29.97],
+		                "云浮":[112.02,22.93],
+		                "梅州":[116.1,24.55],
+		                "文登":[122.05,37.2],
+		                "上海":[121.48,31.22],
+		                "攀枝花":[101.718637,26.582347],
+		                "威海":[122.1,37.5],
+		                "承德":[117.93,40.97],
+		                "厦门":[118.1,24.46],
+		                "汕尾":[115.375279,22.786211],
+		                "潮州":[116.63,23.68],
+		                "丹东":[124.37,40.13],
+		                "太仓":[121.1,31.45],
+		                "曲靖":[103.79,25.51],
+		                "烟台":[121.39,37.52],
+		                "福州":[119.3,26.08],
+		                "瓦房店":[121.979603,39.627114],
+		                "即墨":[120.45,36.38],
+		                "抚顺":[123.97,41.97],
+		                "玉溪":[102.52,24.35],
+		                "张家口":[114.87,40.82],
+		                "阳泉":[113.57,37.85],
+		                "莱州":[119.942327,37.177017],
+		                "湖州":[120.1,30.86],
+		                "汕头":[116.69,23.39],
+		                "昆山":[120.95,31.39],
+		                "宁波":[121.56,29.86],
+		                "湛江":[110.359377,21.270708],
+		                "揭阳":[116.35,23.55],
+		                "荣成":[122.41,37.16],
+		                "连云港":[119.16,34.59],
+		                "葫芦岛":[120.836932,40.711052],
+		                "常熟":[120.74,31.64],
+		                "东莞":[113.75,23.04],
+		                "河源":[114.68,23.73],
+		                "淮安":[119.15,33.5],
+		                "泰州":[119.9,32.49],
+		                "南宁":[108.33,22.84],
+		                "营口":[122.18,40.65],
+		                "惠州":[114.4,23.09],
+		                "江阴":[120.26,31.91],
+		                "蓬莱":[120.75,37.8],
+		                "韶关":[113.62,24.84],
+		                "嘉峪关":[98.289152,39.77313],
+		                "广州":[113.23,23.16],
+		                "延安":[109.47,36.6],
+		                "太原":[112.53,37.87],
+		                "清远":[113.01,23.7],
+		                "中山":[113.38,22.52],
+		                "昆明":[102.73,25.04],
+		                "寿光":[118.73,36.86],
+		                "盘锦":[122.070714,41.119997],
+		                "长治":[113.08,36.18],
+		                "深圳":[114.07,22.62],
+		                "珠海":[113.52,22.3],
+		                "宿迁":[118.3,33.96],
+		                "咸阳":[108.72,34.36],
+		                "铜川":[109.11,35.09],
+		                "平度":[119.97,36.77],
+		                "佛山":[113.11,23.05],
+		                "海口":[110.35,20.02],
+		                "江门":[113.06,22.61],
+		                "章丘":[117.53,36.72],
+		                "肇庆":[112.44,23.05],
+		                "大连":[121.62,38.92],
+		                "临汾":[111.5,36.08],
+		                "吴江":[120.63,31.16],
+		                "石嘴山":[106.39,39.04],
+		                "沈阳":[123.38,41.8],
+		                "苏州":[120.62,31.32],
+		                "茂名":[110.88,21.68],
+		                "嘉兴":[120.76,30.77],
+		                "长春":[125.35,43.88],
+		                "胶州":[120.03336,36.264622],
+		                "银川":[106.27,38.47],
+		                "张家港":[120.555821,31.875428],
+		                "三门峡":[111.19,34.76],
+		                "锦州":[121.15,41.13],
+		                "南昌":[115.89,28.68],
+		                "柳州":[109.4,24.33],
+		                "三亚":[109.511909,18.252847],
+		                "自贡":[104.778442,29.33903],
+		                "吉林":[126.57,43.87],
+		                "阳江":[111.95,21.85],
+		                "泸州":[105.39,28.91],
+		                "西宁":[101.74,36.56],
+		                "宜宾":[104.56,29.77],
+		                "呼和浩特":[111.65,40.82],
+		                "成都":[104.06,30.67],
+		                "大同":[113.3,40.12],
+		                "镇江":[119.44,32.2],
+		                "桂林":[110.28,25.29],
+		                "张家界":[110.479191,29.117096],
+		                "宜兴":[119.82,31.36],
+		                "北海":[109.12,21.49],
+		                "西安":[108.95,34.27],
+		                "金坛":[119.56,31.74],
+		                "东营":[118.49,37.46],
+		                "牡丹江":[129.58,44.6],
+		                "遵义":[106.9,27.7],
+		                "绍兴":[120.58,30.01],
+		                "扬州":[119.42,32.39],
+		                "常州":[119.95,31.79],
+		                "潍坊":[119.1,36.62],
+		                "重庆":[106.54,29.59],
+		                "台州":[121.420757,28.656386],
+		                "南京":[118.78,32.04],
+		                "滨州":[118.03,37.36],
+		                "贵阳":[106.71,26.57],
+		                "无锡":[120.29,31.59],
+		                "本溪":[123.73,41.3],
+		                "克拉玛依":[84.77,45.59],
+		                "渭南":[109.5,34.52],
+		                "马鞍山":[118.48,31.56],
+		                "宝鸡":[107.15,34.38],
+		                "焦作":[113.21,35.24],
+		                "句容":[119.16,31.95],
+		                "北京":[116.46,39.92],
+		                "徐州":[117.2,34.26],
+		                "衡水":[115.72,37.72],
+		                "包头":[110,40.58],
+		                "绵阳":[104.73,31.48],
+		                "乌鲁木齐":[87.68,43.77],
+		                "枣庄":[117.57,34.86],
+		                "杭州":[120.19,30.26],
+		                "淄博":[118.05,36.78],
+		                "鞍山":[122.85,41.12],
+		                "溧阳":[119.48,31.43],
+		                "库尔勒":[86.06,41.68],
+		                "安阳":[114.35,36.1],
+		                "开封":[114.35,34.79],
+		                "济南":[117,36.65],
+		                "德阳":[104.37,31.13],
+		                "温州":[120.65,28.01],
+		                "九江":[115.97,29.71],
+		                "邯郸":[114.47,36.6],
+		                "临安":[119.72,30.23],
+		                "兰州":[103.73,36.03],
+		                "沧州":[116.83,38.33],
+		                "临沂":[118.35,35.05],
+		                "南充":[106.110698,30.837793],
+		                "天津":[117.2,39.13],
+		                "富阳":[119.95,30.07],
+		                "泰安":[117.13,36.18],
+		                "诸暨":[120.23,29.71],
+		                "郑州":[113.65,34.76],
+		                "哈尔滨":[126.63,45.75],
+		                "聊城":[115.97,36.45],
+		                "芜湖":[118.38,31.33],
+		                "唐山":[118.02,39.63],
+		                "平顶山":[113.29,33.75],
+		                "邢台":[114.48,37.05],
+		                "德州":[116.29,37.45],
+		                "济宁":[116.59,35.38],
+		                "荆州":[112.239741,30.335165],
+		                "宜昌":[111.3,30.7],
+		                "义乌":[120.06,29.32],
+		                "丽水":[119.92,28.45],
+		                "洛阳":[112.44,34.7],
+		                "秦皇岛":[119.57,39.95],
+		                "株洲":[113.16,27.83],
+		                "石家庄":[114.48,38.03],
+		                "莱芜":[117.67,36.19],
+		                "常德":[111.69,29.05],
+		                "保定":[115.48,38.85],
+		                "湘潭":[112.91,27.87],
+		                "金华":[119.64,29.12],
+		                "岳阳":[113.09,29.37],
+		                "长沙":[113,28.21],
+		                "衢州":[118.88,28.97],
+		                "廊坊":[116.7,39.53],
+		                "菏泽":[115.480656,35.23375],
+		                "合肥":[117.27,31.86],
+		                "武汉":[114.31,30.52],
+		                "大庆":[125.03,46.58]
+		            }
+		        },
+		        {
+		            name: 'pm2.5',//系列名称，如启用legend，该值将被legend.data索引相关
+		            type: 'map',//图表类型
+		            mapType: 'china',//地图类型，支持world，china及全国34个省市自治区
+		            data:[],//数据
+		            markPoint : {//标注
+		                symbol:'emptyCircle',//标注类型
+		                symbolSize : function (v){//标注大小
+		                    return 10 + v/100
+		                },
+		                effect : {//标注图形炫光特效
+		                    show: true,//开启标注图形炫光特效
+		                    shadowBlur : 0//光影模糊度，默认为0 
+		                },
+		                itemStyle:{//标注图形样式属性
+		                    normal:{
+		                        label:{show:false}//标签
+		                    }
+		                },
+		                data : [//数据
+		                    {name: "廊坊", value: 193},
+		                    {name: "菏泽", value: 194},
+		                    {name: "合肥", value: 229},
+		                    {name: "武汉", value: 273},
+		                    {name: "大庆", value: 279}
+		                ]
+		            }
+		        }
+		    ]
+		};
+		 
+		        
+		                // 为echarts对象加载数据                 
+						myChartHXT.setOption(optionHXT); //环形图
+						myChartBZT.setOption(optionBZT); //饼状图                
+						myChartZXT.setOption(optionZXT); //折线图
+		                myChartZZT.setOption(optionZZT); //柱状图
+		                myChartMAP.setOption(optionMAP); //地图
+						
+		            }
+		        );
+		          
+		
+		
+		
+		//================控制交互================
+		$(document).ready(function(){
+			$(".T-zhexiantu").click(function(){
+				$(this).addClass("border");
+				$(".T-zhuzhuangtu").removeClass("border");
+				$("#zhexiantu").removeClass("hidden");
+				$("#zhuzhuangtu").addClass("hidden")
+			});
+			$(".T-zhuzhuangtu").click(function(){
+				$(this).addClass("border");
+				$(".T-zhexiantu").removeClass("border");
+				$("#zhuzhuangtu").removeClass("hidden");
+				$("#zhexiantu").addClass("hidden");
+				});
+			$(".T-huanxingtu").click(function(){
+				$(this).addClass("border");
+				$(".T-bingzhuangtu").removeClass("border");
+				$("#huanxingtu").removeClass("hidden");
+				$("#bingzhuangtu").addClass("hidden")
+			});
+			$(".T-bingzhuangtu").click(function(){
+				$(this).addClass("border");
+				$(".T-huanxingtu").removeClass("border");
+				$("#bingzhuangtu").removeClass("hidden");
+				$("#huanxingtu").addClass("hidden");
+				});		
+		});
+	</script>
+
+</html>

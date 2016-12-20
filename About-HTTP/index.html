@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>About HTTP</title>
+<script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery/jquery-1.4.min.js"></script>
+<style>
+body{margin:0px;padding:0px;font-family:"微软雅黑";}
+ a{ text-decoration:none;color:black;font-family:"微软雅黑";}
+ a:hover{color:#000;text-decoration:none;}
+ .nav{height:32px; width:100%;margin:0 auto; overflow:hidden;position: absolute;top: 0px;z-index: 105;opacity: 0.25;}
+  .nav:hover{opacity: 1;}
+ .nav>li{list-style:none;height:30px; width:145px;border:1px solid rgba(0,0,0,0.75); text-align:center; line-height:30px;float: left;margin-right: 20px}
+ .nav>li:hover{ 	
+ 	background:rgba(204,201,201,1.00); 
+ 	cursor:pointer;color:#000;
+ 	border: 1px solid #fff;}
+ .backtop{display:none;
+	    height:60px;
+		width:60px;
+		position:fixed;
+		right:5px;
+		bottom:5px;
+		background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABJCAYAAACesWDiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NTAwMjY2QkYwMUZGMTFFNDkzOURCMkVDRDhEMzE5RjIiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NTAwMjY2QzAwMUZGMTFFNDkzOURCMkVDRDhEMzE5RjIiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo1MDAyNjZCRDAxRkYxMUU0OTM5REIyRUNEOEQzMTlGMiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo1MDAyNjZCRTAxRkYxMUU0OTM5REIyRUNEOEQzMTlGMiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PvuJy9QAAAHTSURBVHja7NtbTsJQEAbgQlyD3DHcLz6yAfegxsuTS/PNBOSqL7zgCliE2wANTpP/JMTkFAqc0nP6TzIhdDpD54M0fSG12Ww8hj5SBCIQgQhEIAIRiEAEYhCIQAQiEIEI5HnL5fKQtivJV8kXye+wzb1ezwhQOiZfVFnyS/IGr+W4/ILiAFQCSgXvK3FCSscEp/rveBXHS0kGKgKhpqkrpGISgXbhqKidG+kcQAXJhWR9z/PrOL+YBCCF0wjZ10BfwWWgPJZsHtivkPIuAuWOxFHRxJycS0BZLNU60bwWbtw5F4CyWKatqa8kp5raFHUd0gLzrQXKYIkgnFvJuaY+R12H1Mb8jI1Al7j4zg6czx1z/PpdAFLHNJIpIP+iuwE493vgqPjA+TqkLj7PKqDrAJwHyVnIeTP0BSFZ/xzkL/coOTmwf4L+lYvPQf5ST5LjI+eMMWflEtBa8llydKJ5I8xbuwCkcIYnnjuMCunC4OwfLPFuaL6a+2ZyD1ODfw3jbCOlgGQVkI8ziOg+OgCSVfegvhdt9G0DciYIRCACEYhABCIQgQjEIBCBCEQgAhGIQARibAX/ikAgAhGIQAQiEIEIxCAQgQhEIAIRiEDJij8BBgBFJq42Iz+kygAAAABJRU5ErkJggg==");
+		background-repeat:no-repeat;
+		background-position:center;
+		background-color:#999;
+		filter:alpha(opacity=55);
+		opacity:0.55;
+		z-index:10;
+		cursor:pointer;}
+.backtop:hover{background-color:#666;
+				filter:alpha(opacity=85);
+				opacity:0.85;}			
+ 	
+</style>
+</head>
+<body>
+ 	   <div class="backtop"></div>
+
+	   <div class="nav">
+
+	    <li><a href="../wxf.shitoujiandaobu/index.html">石头剪刀布</a></li>
+	    <li><a href="../wxf.beijingAQI/index.html">BeijingAQI</a></li>
+	    <li><a href="../wxf.liuxinglaixi/index.html">流星来袭</a></li>
+	    <li><a href="../AQI/echarts/index.html">空气质量监测表</a></li>
+	    <li><a href="../tsjk1501/index.html">tsjk1501</a></li>
+	    <li><a href="../About-HTTP/index.html">http协议笔记</a></li>
+
+	   </div>
+<div style="width:1200px;height:5500px; background: url(About%20HTTP.jpg) no-repeat center center;margin:0 auto;"></div>
+<center><span>注：本笔记由Photoshop完成，源文件为PSD格式，<a href="About HTTP.rar">单机此处下载PSD文件</a></span></center>
+
+</body>
+<script>
+$(document).ready(function() {
+	$(".backtop").click(function() {
+		$("html, body").animate({
+			"scroll-top": 0
+		}, "fast");
+	});
+});
+$(window).scroll(function() {
+	if ($(window).scrollTop() > 100) {
+		$(".backtop").slideDown(300);
+	} else {
+		$(".backtop").slideUp(300);
+	}
+});	
+	
+	
+</script>
+</html>
